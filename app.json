@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "price-checker-item",
+    "name": "Price Checker App",
     "slug": "price-checker-item",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,7 +18,11 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -32,6 +36,12 @@
           "recordAudioAndroid": true
         }
       ]
-    ]
+    ],
+    "owner": "kymrhys",
+    "extra": {
+      "eas": {
+        "projectId": "68e9c7cb-5d9e-48b9-b5c2-97ddca020c17"
+      }
+    }
   }
 }

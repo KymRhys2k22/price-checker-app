@@ -115,6 +115,9 @@ export default function BarCodeItemScanner() {
               }}>
               <Text style={styles.textStyle}>Tap to Scan Again</Text>
             </Pressable>
+            <Text style={{ fontSize: 12, color: "gray", textAlign: "center" }}>
+              Pinag-puyatan by: {"\n"}KYM RHYS MALLARI
+            </Text>
           </View>
         </View>
       </Modal>
