@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -16,7 +16,7 @@ const Home = () => {
       <Text style={{ fontSize: 40, fontWeight: "bold", color: "gray" }}>
         Price Check
       </Text>
-      <MaterialIcons name="qr-code-scanner" size={300} color="black" />
+      <MaterialCommunityIcons name="barcode-scan" size={300} color="black" />
       <Text
         style={{
           fontSize: 40,

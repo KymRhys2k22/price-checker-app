@@ -3,17 +3,15 @@ import {
   Text,
   View,
   StyleSheet,
-  Button,
   Modal,
   Pressable,
-  Touchable,
   TouchableOpacity,
-  TextComponent,
+  ActivityIndicator,
 } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import Items from "../items.json";
 import { StatusBar } from "expo-status-bar";
-import { SimpleLineIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function BarCodeItemScanner() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -32,20 +30,25 @@ export default function BarCodeItemScanner() {
 
   const handleBarCodeScanned = ({ data }) => {
     setScanned(true);
-
+    //**map items file from json and filter
     const result = () =>
       Items.filter((item) => item.SKU === data || item.UPC === data).map(
         (items) => {
           setModalVisible(true);
           setResults(items);
         }
-        /* alert(`your Item: ${items.Description} Price: ${items.Price}`) */
       );
     result();
   };
 
   if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
+    return (
+      <View
+        style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>
+        <ActivityIndicator size="large" />
+        <Text>Requesting for camera permission</Text>
+      </View>
+    );
   }
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
@@ -77,11 +80,11 @@ export default function BarCodeItemScanner() {
           </Text>
         </View>
       )}
-      <SimpleLineIcons
+      <MaterialCommunityIcons
         style={{ top: 1, left: 1 }}
-        name="frame"
+        name="scan-helper"
         size={300}
-        color="#fff"
+        color="#F4F3F2"
       />
       <Modal
         animationType="slide"
@@ -98,6 +101,13 @@ export default function BarCodeItemScanner() {
               <Text style={styles.modalTextResult}>
                 {`\n`}
                 {results.Description}
+              </Text>
+            </Text>
+            <Text style={styles.modalText}>
+              UPC:
+              <Text style={styles.modalTextResult}>
+                {`\n`}
+                {results.UPC}
               </Text>
             </Text>
             <Text style={styles.modalText}>
@@ -164,7 +174,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: "#252525",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -190,7 +200,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#2196F3",
   },
   textStyle: {
-    color: "white",
+    color: "#F4F3F2",
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 20,
@@ -199,11 +209,11 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
     fontSize: 20,
-    color: "gray",
+    color: "#CCCCCC",
   },
   modalTextResult: {
     fontWeight: "bold",
-    color: "#252525",
+    color: "#F4F3F2",
     fontSize: 25,
   },
 });
