@@ -7,6 +7,9 @@ import {
   Pressable,
   TouchableOpacity,
   ActivityIndicator,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import Items from "../items.json";
@@ -18,6 +21,7 @@ export default function BarCodeItemScanner() {
   const [scanned, setScanned] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [results, setResults] = useState({});
+  const [manualInput, setManualInput] = useState("");
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -41,12 +45,33 @@ export default function BarCodeItemScanner() {
     result();
   };
 
+  const handleManualInput = ({ data }) => {
+    if (!data) {
+      return;
+    }
+    setScanned(true);
+    //**map items file from json and filter
+    const result = () =>
+      Items.filter((item) => item.SKU === data || item.UPC === data).map(
+        (items) => {
+          setModalVisible(true);
+          setResults(items);
+        }
+      );
+    result();
+  };
+
   if (hasPermission === null) {
     return (
       <View
-        style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignContent: "center",
+          flexDirection: "row",
+        }}>
         <ActivityIndicator size="large" />
-        <Text>Requesting for camera permission</Text>
+        <Text style={{ fontSize: 24 }}>Requesting for camera permission</Text>
       </View>
     );
   }
@@ -55,13 +80,16 @@ export default function BarCodeItemScanner() {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 120}
+      behavior="padding"
+      style={styles.container}>
       <BarCodeScanner
         BarCodeBounds
-        BarCodeSize={{}}
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
+
       {scanned && !modalVisible && (
         <View
           style={{
@@ -81,7 +109,7 @@ export default function BarCodeItemScanner() {
         </View>
       )}
       <MaterialCommunityIcons
-        style={{ top: 1, left: 1 }}
+        style={{ top: -8, left: 1 }}
         name="scan-helper"
         size={300}
         color="#F4F3F2"
@@ -107,6 +135,13 @@ export default function BarCodeItemScanner() {
               UPC:
               <Text style={styles.modalTextResult}>
                 {`\n`}
+                {results.SKU}
+              </Text>
+            </Text>
+            <Text style={styles.modalText}>
+              SKU:
+              <Text style={styles.modalTextResult}>
+                {`\n`}
                 {results.UPC}
               </Text>
             </Text>
@@ -122,6 +157,7 @@ export default function BarCodeItemScanner() {
                 setScanned(false);
                 setModalVisible(!modalVisible);
                 setResults({});
+                setManualInput("");
               }}>
               <Text style={styles.textStyle}>Tap to Scan Again</Text>
             </Pressable>
@@ -148,13 +184,30 @@ export default function BarCodeItemScanner() {
               fontWeight: "bold",
               color: "#fff",
             }}>
-            SCAN AGAIN
+            SCAN/INPUT AGAIN
           </Text>
         </TouchableOpacity>
       )}
+      <View style={styles.manualInput}>
+        <TextInput
+          style={{ fontSize: 24, width: "90%" }}
+          placeholder="SKU or UPC"
+          value={manualInput}
+          onChangeText={setManualInput}
+          keyboardType="numeric"
+          maxLength={13}
+          onBlur={() => handleManualInput({ data: manualInput })}
+        />
+        <MaterialCommunityIcons
+          onPress={() => handleManualInput({ data: manualInput })}
+          name="text-search"
+          size={24}
+          color="red"
+        />
+      </View>
 
-      <StatusBar style="='auto" />
-    </View>
+      <StatusBar style="auto" />
+    </KeyboardAvoidingView>
   );
 }
 
@@ -215,5 +268,27 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#F4F3F2",
     fontSize: 25,
+  },
+  manualInput: {
+    position: "static",
+    borderWidth: 1,
+    borderColor: "#252525",
+    backgroundColor: "#fff",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    bottom: -100,
+    width: "90%",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });
