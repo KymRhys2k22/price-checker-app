@@ -21,11 +21,29 @@ const Home = () => {
         style={{
           fontSize: 40,
           fontWeight: "bold",
-          marginBottom: 200,
+          marginBottom: 80,
           color: "gray",
         }}>
         App
       </Text>
+      <View
+        style={{
+          alignItems: "center",
+          paddingHorizontal: 20,
+          paddingBottom: 20,
+        }}>
+        <Text>version 2.0.0{"\n"}</Text>
+        <Text>
+          <Text style={{ fontWeight: "bold" }}>
+            Here’s an improved version:
+          </Text>
+          {"\n"}
+          {"\n"}
+          -You can now click on the UPC and SKU to search directly on Google
+          Images.{"\n"}
+          -You can view the sub-department of each item.
+        </Text>
+      </View>
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("BarcodeItemScanner")}>

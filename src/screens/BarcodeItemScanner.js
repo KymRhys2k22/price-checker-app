@@ -10,6 +10,8 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  Linking,
+  Alert,
 } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import Items from "../items.json";
@@ -22,6 +24,49 @@ export default function BarCodeItemScanner() {
   const [modalVisible, setModalVisible] = useState(false);
   const [results, setResults] = useState({});
   const [manualInput, setManualInput] = useState("");
+
+  const department = (results) => {
+    let department = "";
+    switch (results) {
+      case "500":
+        department = "Cleaning";
+        break;
+      case "110":
+        department = "Apparel";
+        break;
+      case "120":
+        department = "Accessories";
+        break;
+      case "160":
+        department = "Cosmetics";
+        break;
+      case "170":
+        department = "HBA";
+        break;
+      case "210":
+        department = "Stationery";
+        break;
+      case "220":
+        department = "Toys";
+        break;
+      case "260":
+        department = "Food";
+        break;
+      case "310":
+        department = "DIY";
+        break;
+      case "360":
+        department = "Storage";
+        break;
+      case "410":
+        department = "Kitchen";
+        break;
+      case "420":
+        department = "Tableware";
+        break;
+    }
+    return department;
+  };
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -132,18 +177,51 @@ export default function BarCodeItemScanner() {
               </Text>
             </Text>
             <Text style={styles.modalText}>
-              UPC:
+              Sub Department:
               <Text style={styles.modalTextResult}>
                 {`\n`}
-                {results.SKU}
+
+                {department(results["Sub Dep"])}
               </Text>
             </Text>
             <Text style={styles.modalText}>
-              SKU:
-              <Text style={styles.modalTextResult}>
-                {`\n`}
-                {results.UPC}
-              </Text>
+              UPC:{`\n`}
+              <TouchableOpacity
+                onPress={() => {
+                  Linking.openURL(
+                    `https://www.google.com/search?tbm=isch&q=${results.SKU}`
+                  );
+                }}>
+                <Text style={styles.modalTextResult}>
+                  {results.SKU}
+                  <MaterialCommunityIcons
+                    className="animate-spin"
+                    name="image-search-outline"
+                    size={24}
+                    color="pink"
+                  />
+                </Text>
+              </TouchableOpacity>
+            </Text>
+            <Text style={styles.modalText}>
+              SKU:{`\n`}
+              <TouchableOpacity
+                onPress={() => {
+                  Linking.openURL(
+                    `https://www.google.com/search?tbm=isch&q=${results.UPC}`
+                  );
+                }}>
+                <View className="">
+                  <Text style={styles.modalTextResult}>
+                    {results.UPC}{" "}
+                    <MaterialCommunityIcons
+                      name="image-search-outline"
+                      size={24}
+                      color="pink"
+                    />
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </Text>
             <Text style={styles.modalText}>
               Price:
