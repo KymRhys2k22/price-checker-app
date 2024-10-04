@@ -113,10 +113,15 @@ export default function BarCodeItemScanner() {
           flex: 1,
           justifyContent: "center",
           alignContent: "center",
-          flexDirection: "row",
         }}>
-        <ActivityIndicator size="large" />
-        <Text style={{ fontSize: 24 }}>Requesting for camera permission</Text>
+        <Text
+          style={{
+            textAlign: "center",
+            fontSize: 24,
+            flexDirection: "row",
+          }}>
+          Requesting for camera permission <ActivityIndicator size="large" />{" "}
+        </Text>
       </View>
     );
   }
