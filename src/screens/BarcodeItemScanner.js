@@ -25,6 +25,14 @@ export default function BarCodeItemScanner() {
   const [results, setResults] = useState({});
   const [manualInput, setManualInput] = useState("");
 
+  useEffect(() => {
+    Items.map((item) => {
+      if (item.SKU === 4549131484427 || item.UPC === 4549131484427) {
+        console.table(item);
+      }
+    });
+  }, []);
+
   const department = (results) => {
     let department = "";
     switch (results) {
@@ -64,6 +72,33 @@ export default function BarCodeItemScanner() {
       case "420":
         department = "Tableware";
         break;
+      case "100":
+        department = "Apparel & Accessories";
+        break;
+      case "250":
+        department = "Food";
+        break;
+      case "200":
+        department = "General Merchandise";
+        break;
+      case "300":
+        department = "Hardware";
+        break;
+      case "150":
+        department = "Health & Beauty Aids";
+        break;
+      case "450":
+        department = "Interior";
+        break;
+      case "400":
+        department = "Kitchen & Dining";
+        break;
+      case "550":
+        department = "Outdoor";
+        break;
+      case "350":
+        department = "Storage";
+        break;
     }
     return department;
   };
@@ -79,7 +114,9 @@ export default function BarCodeItemScanner() {
 
   const handleBarCodeScanned = ({ data }) => {
     setScanned(true);
+
     //**map items file from json and filter
+
     const result = () =>
       Items.filter((item) => item.SKU === data || item.UPC === data).map(
         (items) => {
@@ -87,6 +124,7 @@ export default function BarCodeItemScanner() {
           setResults(items);
         }
       );
+
     result();
   };
 
@@ -96,6 +134,7 @@ export default function BarCodeItemScanner() {
     }
     setScanned(true);
     //**map items file from json and filter
+
     const result = () =>
       Items.filter((item) => item.SKU === data || item.UPC === data).map(
         (items) => {
@@ -103,6 +142,7 @@ export default function BarCodeItemScanner() {
           setResults(items);
         }
       );
+
     result();
   };
 
@@ -179,6 +219,14 @@ export default function BarCodeItemScanner() {
               <Text style={styles.modalTextResult}>
                 {`\n`}
                 {results.Description}
+              </Text>
+            </Text>
+            <Text style={styles.modalText}>
+              Department:
+              <Text style={styles.modalTextResult}>
+                {`\n`}
+
+                {department(results.Department)}
               </Text>
             </Text>
             <Text style={styles.modalText}>
